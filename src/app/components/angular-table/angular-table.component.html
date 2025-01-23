@@ -6,16 +6,17 @@
   [rows]="10"
   [resizableColumns]="true"
   styleClass="p-datatable-gridlines"
+  [paginator]="true"
   [showCurrentPageReport]="true"
   [rowsPerPageOptions]="[10, 25, 50]"
   [loading]="loading"
-  [paginator]="true"
+  [columns]="selectedColumns"
   currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
   [filterDelay]="0"
   [globalFilterFields]="['name.first', 'name.last', 'age', 'company', 'email', 'address']"
 >
-  <ng-template #caption>
-    <div class="flex justify-content-between gap-2">
+  <ng-template pTemplate="caption">
+    <div class="flex justify-content-between gap-2 w-full flex-wrap">
       <p-multiSelect display="chip"
                      [options]="cols"
                      [(ngModel)]="selectedColumns"
@@ -34,7 +35,7 @@
     </div>
   </ng-template>
 
-  <ng-template #header let-columns>
+  <ng-template pTemplate="header" let-columns>
     <tr>
       @for (column of columns; track column) {
         @if (column.sortable) {
@@ -77,9 +78,12 @@
           </th>
         }
       }
-  <ng-template #body let-item>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="body" let-item>
     <tr class="p-selectable-row">
-      @for (column of columns; track column) {
+      @for (column of selectedColumns; track column) {
         <td>
         @if (column.field === 'name.first') {
           <div class="flex items-center gap-2">
@@ -102,10 +106,10 @@
     </tr>
   </ng-template>
 
-  <ng-template #emptymessage>
-    <tr>
-      <td colspan="{{selectedColumns.length}}">No values found</td>
-    </tr>
-  </ng-template>
+<!--  <ng-template #emptymessage>-->
+<!--    <tr>-->
+<!--      <td colspan="{{selectedColumns?.length}}">No values found</td>-->
+<!--    </tr>-->
+<!--  </ng-template>-->
 
 </p-table>

@@ -7,7 +7,7 @@ import {MultiSelect} from 'primeng/multiselect';
 import {TableType} from '../../types/tableType.interface';
 import {AngularTableService} from './angular-table.service';
 import {DropdownModule} from 'primeng/dropdown';
-import {Tag} from 'primeng/tag';
+
 import {Column} from '../../types/column.interface';
 import {CurrencyPipe} from '@angular/common';
 import {Subscription} from 'rxjs';
@@ -23,9 +23,9 @@ import {Subscription} from 'rxjs';
     FormsModule,
     MultiSelect,
     DropdownModule,
-    Tag,
     CurrencyPipe
   ],
+  styleUrls: ['./angular-table.component.scss'],
 })
 export class AngularTableComponent implements OnInit, OnDestroy {
   searchValue = '';

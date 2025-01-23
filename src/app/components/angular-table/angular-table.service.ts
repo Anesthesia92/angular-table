@@ -10,8 +10,8 @@ export class AngularTableService {
   constructor() {
   }
 
-  getValuesTable(): Observable<TableType[]> {
-   const data = [
+  getValuesTable(): Observable<any> {
+   let data = [
       {
         _id: '5fe1933e71260abb214c869e',
         isActive: false,

@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Table, TableModule} from 'primeng/table';
 import {Button} from 'primeng/button';
 import {InputText} from 'primeng/inputtext';
@@ -10,6 +10,7 @@ import {DropdownModule} from 'primeng/dropdown';
 import {Tag} from 'primeng/tag';
 import {Column} from '../../types/column.interface';
 import {CurrencyPipe} from '@angular/common';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-angular-table',
@@ -26,7 +27,7 @@ import {CurrencyPipe} from '@angular/common';
     CurrencyPipe
   ],
 })
-export class AngularTableComponent implements OnInit {
+export class AngularTableComponent implements OnInit, OnDestroy {
   searchValue = '';
 
   values: TableType[] = [];
@@ -35,6 +36,8 @@ export class AngularTableComponent implements OnInit {
   cols: Column[] = [];
 
   selectedColumns: Column[] = [];
+
+  private subscription: Subscription = new Subscription();
 
   constructor(private service: AngularTableService) {
     this.loading = true;
@@ -58,14 +61,17 @@ export class AngularTableComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.service.getValuesTable().then((items) => {
+    this.subscription.add(this.service.getValuesTable().subscribe((items) => {
       this.values = items;
       this.loading = false;
-    });
+    }));
   }
 
   clear(dt: Table) {
     dt.clear();
   }
 
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
+  }
 }

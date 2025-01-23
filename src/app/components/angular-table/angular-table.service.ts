@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {Observable, pipe} from 'rxjs';
+import {Observable, of, pipe} from 'rxjs';
 import {TableType} from '../../types/tableType.interface';
 
 @Injectable({
@@ -10,8 +10,8 @@ export class AngularTableService {
   constructor() {
   }
 
-  getData(): any[] {
-    return [
+  getValuesTable(): Observable<TableType[]> {
+   const data = [
       {
         _id: '5fe1933e71260abb214c869e',
         isActive: false,
@@ -1013,10 +1013,7 @@ export class AngularTableService {
         favoriteFruit: 'apple',
       },
     ];
-  }
-
-  getValuesTable() {
-    return Promise.resolve(this.getData());
+    return of(data);
   }
 
 }

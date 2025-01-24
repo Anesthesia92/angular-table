@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
 import {Table, TableModule} from 'primeng/table';
 import {Button} from 'primeng/button';
 import {InputText} from 'primeng/inputtext';
@@ -11,6 +11,8 @@ import {DropdownModule} from 'primeng/dropdown';
 import {Column} from '../../types/column.interface';
 import {CurrencyPipe} from '@angular/common';
 import {Subscription} from 'rxjs';
+import {Card} from 'primeng/card';
+import {Tag} from 'primeng/tag';
 
 @Component({
   selector: 'app-angular-table',
@@ -23,9 +25,10 @@ import {Subscription} from 'rxjs';
     FormsModule,
     MultiSelect,
     DropdownModule,
-    CurrencyPipe
+    Card,
+    Tag,
   ],
-  styleUrls: ['./angular-table.component.scss'],
+  encapsulation: ViewEncapsulation.None,
 })
 export class AngularTableComponent implements OnInit, OnDestroy {
   searchValue = '';

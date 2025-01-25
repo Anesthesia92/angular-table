@@ -1,7 +1,7 @@
 export interface TableType {
   _id: string,
   isActive: boolean,
-  balance: string,
+  balance: string | number,
   picture: string,
   age: number,
   name: {
@@ -13,4 +13,5 @@ export interface TableType {
   address: string,
   tags: string[],
   favoriteFruit: string,
+  color?: string;
 }

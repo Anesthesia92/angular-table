@@ -1,11 +1,10 @@
-@import "primeicons/primeicons.css";
-@import "primeflex/primeflex.css";
-@import "primeflex/themes/primeone-dark.css";
+//@import "primeicons/primeicons.css";
+//@import "primeflex/primeflex.css";
+//@import "primeflex/themes/primeone-dark.css";
 
 $fontFamily: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
 Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
 "Segoe UI Symbol";
-
 
 :root {
   font-family: $fontFamily;
@@ -217,25 +216,34 @@ main {
 }
 
 
-$purple-light: var(--cyan-100);
-$purple-main: var(--cyan-500);
-$purple-dark: var(--cyan-700);
+$blue-light: var(--cyan-100);
+$blue-main: var(--cyan-500);
+$blue-dark: var(--cyan-700);
+
+.p-inputtext {
+  border-radius: 4px;
+  border: 1px solid $blue-light;
+  transition: border-color 0.3s;
+
+  &:focus {
+    border-color: var(--cyan-200);
+    box-shadow: 0 0 5px rgba(106, 90, 205, 0.5);
+  }
+}
 
 .tabs-container {
-  //@extend .p-tabview;
-
   .p-tablist-tab-list {
     font-family: $fontFamily;
-    background-color: $purple-light;
-    border-bottom: 1px solid $purple-main;
+    background-color: $blue-light;
+    border-bottom: 1px solid $blue-main;
 
     .p-tab{
       border-radius: 0;
       margin: 0;
-      border: 1px solid $purple-main;
+      border: 1px solid $blue-main;
       border-bottom: 0;
       &.p-highlight {
-        background-color: $purple-main;
+        background-color: $blue-main;
         color: white;
         border: inherit;
         &:hover {
@@ -245,8 +253,8 @@ $purple-dark: var(--cyan-700);
       }
 
       &.p-tab-active{
-        background-color: $purple-main;
-        border: 1px solid $purple-main;
+        background-color: $blue-main;
+        border: 1px solid $blue-main;
         color: white;
         font-weight: bold;
       }
@@ -254,16 +262,69 @@ $purple-dark: var(--cyan-700);
       &:hover {
         background-color: lighten(#047F94FF, 10%);
         color: white;
-        border: 1px solid $purple-main;
+        border: 1px solid $blue-main;
       }
     }
   }
 
   .p-tabpanels {
     background-color: white;
-    border: 1px solid $purple-main;
+    border: 1px solid $blue-main;
     border-radius: 4px;
     padding: 1rem;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   }
+}
+
+.filter-boolean {
+  min-width: 6rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  height: 65px;
+}
+
+.circle {
+  width: 40px;
+  height: 40px;
+  border: 2px solid;
+  border-radius: 50%;
+  transition: background-color 0.3s;
+}
+
+@media screen and (max-width: 400px){
+  .p-datatable-header {
+    padding: 0;
+  }
+}
+
+$primary-purple: var(--purple-700); // Темно-сиреневый
+$secondary-purple: var(--purple-500); // Средний сиреневый
+$light-purple: var(--purple-100); // Светло-сиреневый
+$text-color: #ffffff;
+
+.table-container {
+  background-color: $light-purple;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+
+  .p-datatable {
+    .p-datatable-tbody > tr {
+      &:nth-child(even) {
+        background-color: var(--purple-50);
+      }
+
+      &:hover {
+        background-color: $secondary-purple;
+      }
+    }
+
+    .p-datatable-tbody > tr > td {
+      text-align: left;
+      padding: 12px 8px;
+      border: none;
+      color: $primary-purple;
+    }
+  }
+
 }

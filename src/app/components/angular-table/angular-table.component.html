@@ -6,20 +6,24 @@
     [rowHover]="true"
     [rows]="10"
     [resizableColumns]="true"
+    class="table-container"
     styleClass="p-datatable-gridlines"
     [paginator]="true"
     [showCurrentPageReport]="true"
     [rowsPerPageOptions]="[10, 25, 50]"
     [loading]="loading"
+    scrollHeight="100vh"
+    sortMode="multiple"
     [columns]="selectedColumns"
     currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
-    [globalFilterFields]="['name.first', 'name.last', 'age', 'company', 'email', 'address']"
+    [globalFilterFields]="['name.first', 'name.last', 'age', 'company', 'email', 'address', 'tags', 'favoriteFruit']"
     responsiveLayout="scroll"
     [filterDelay]="600"
   >
     <ng-template pTemplate="caption">
       <div class="flex justify-content-between gap-2 w-full flex-wrap">
         <p-multiSelect display="chip"
+                       appendTo="body"
                        [options]="cols"
                        [(ngModel)]="selectedColumns"
                        optionLabel="header"
@@ -27,9 +31,11 @@
                        [style]="{ 'min-width': '200px' }"
                        placeholder="Choose Columns"/>
 
-        <div class="flex justify-content-end gap-2">
+        <div class="flex justify-content-end gap-2 flex-wrap">
           <p-button [outlined]="true" icon="pi pi-filter-slash" label="Clear" (click)="clear(dt)"/>
-          <input pInputText type="text" #tableSearchInput
+          <input pInputText type="text"
+                 #tableSearchInput
+                 class="lg:w-23rem max-w-full"
                  [(ngModel)]="searchValue"
                  (input)="dt.filterGlobal(tableSearchInput.value, 'contains')"
                  placeholder="Search "/>
@@ -41,40 +47,44 @@
       <tr>
         @for (column of columns; track column) {
           @if (column.sortable) {
-            <th pSortableColumn="{{column.field}}" style="min-width: 5rem">
-                {{column.header}}
+              <th pSortableColumn="{{column.field}}" style="min-width: 5rem">
+                {{ column.header }}
                 <p-sortIcon field="{{column.field}}"/>
-                <p-columnFilter type="{{column.type}}" field="{{column.field}}" display="menu" class="ml-auto"/>
+                @if (column.field === 'balance') {
+                  <p-columnFilter type="numeric" field="balance" display="menu" currency="USD" class="ml-auto" />
+                } @else {
+                  <p-columnFilter type="{{column.type}}" field="{{column.field}}" display="menu" class="ml-auto"/>
+                }
+              </th>
+          } @else if (column.field === 'isActive') {
+            <th class="filter-boolean">
+              <span> isActive</span>
+
+              <div>             <p-columnFilter type="boolean"
+                                                field="isActive"
+                                                [showMenu]="false"
+                                                [showClearButton]="false"
+                                                matchMode="equals"
+              ></p-columnFilter></div>
+
             </th>
-          } @else if(column.field === 'isActive')  {
-            <th style="min-width: 5rem">
-                isActive
-                <p-columnFilter type="boolean"
-                                field="isActive"
-                                [showMenu]="false"
-                                [showClearButton]="false"
-                                matchMode="equals"
-                ></p-columnFilter>
-            </th>
-          } @else if(column.field === 'tags')  {
+          } @else if (column.field === 'tags') {
             <th style="min-width: 10rem">
-              Tags
-<!--              @for(item of values; track item) {-->
-<!--                @if (item[] === column.field) {-->
-<!--                  <p-columnFilter field="tags" matchMode="equals" display="menu" class="ml-auto">-->
-<!--                    <ng-template #filter let-value let-filter="filterCallback">-->
-<!--                      <p-dropdown [options]="item.tags"-->
-<!--                                  [ngModel]="value"-->
-<!--                                  (onChange)="filter($event.value)"-->
-<!--                                  placeholder="Select tag">-->
-<!--                        <ng-template let-option #tag>-->
-<!--                          <p-tag [value]="option"/>-->
-<!--                        </ng-template>-->
-<!--                      </p-dropdown>-->
-<!--                    </ng-template>-->
-<!--                  </p-columnFilter>-->
-<!--              }-->
-<!--              }-->
+              <span class="mr-2">Tags: </span>
+                  <p-multiSelect [options]="approveTypes"
+                                 appendTo="body"
+                                 [ngModel]="selected"
+                                 [filter]="true"
+                                 [maxSelectedLabels]="2"
+                                 (onClear)="getValuesTable()"
+                                 (onChange)="filterObjectsByTags($event.value, values)"
+                                 selectedItemsLabel="{0} tags selected"
+                                 [showClear]="true"
+                                 placeholder="Choose tags">
+                    <ng-template let-option pTemplate="item">
+                      <span class="ml-1">{{option}}</span>
+                    </ng-template>
+                    </p-multiSelect>
             </th>
           }
         }
@@ -83,20 +93,32 @@
 
     <ng-template pTemplate="body" let-item>
       <tr class="p-selectable-row">
-        @for (column of selectedColumns; track column) {
-          <td>
+        @for (column of selectedColumns; track column.field) {
+          <td class="max-w-17rem overflow-auto">
             @if (column.field === 'name.first') {
-              <div class="flex items-center gap-2">
-<!--                <img alt="picture"-->
-<!--                     src="{{item.picture}}" width="32" style="vertical-align: middle" />-->
-                <span class="ml-1 align-middle">{{ item.name.first }}</span>
+              <div class="flex align-items-center gap-2">
+                <div class="circle"
+                     [ngStyle]="{'background-color': item.color, 'border-color': item.color}"
+                     (mouseenter)="item.color = darkenColor(item.color)"
+                     (mouseleave)="item.color = getRandomColor()">
+                </div>
+
+                <span class="align-middle">{{ item.name?.first || '-' }}</span>
               </div>
+            } @else if (column.field === 'name.last') {
+              <span class="ml-1 align-middle">{{ item.name?.last || '-' }}</span>
+            }
+              @else if (column.field === 'favoriteFruit') {
+              <span>{{ getFruitColor(item[column.field]) }}</span>
+            }
+            @else if (column.field === 'email') {
+              <span><i class="pi pi-at mr-1" style="color: slateblue"></i> {{ item[column.field] }}</span>
+            } @else if (column.field === 'balance') {
+              <span>{{ item.balance | currency: 'USD' : 'symbol'}}</span>
             } @else if (column.field === 'tags') {
               @for (tag of item.tags; track tag) {
-                <span># {{tag}}</span>
+                <span class="mr-1">#{{ tag }}</span>
               }
-            } @else if (column.field === 'balance') {
-              <span>{{ item.balance }}</span>
             } @else {
               {{ item[column.field] }}
             }

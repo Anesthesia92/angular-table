@@ -91,9 +91,10 @@ export class AngularTableComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   clear(dt: Table) {
-    dt.clear();
     this.getValuesTable();
     this.generateCircles();
+    this.selected = [];
+    dt.clear();
   }
 
   changeBalanceTypeToNumeric(value: any): number {
@@ -114,7 +115,6 @@ export class AngularTableComponent implements OnInit, AfterViewInit, OnDestroy {
 
   getRandomColor(): string {
     //изображения (picture) не отображаются, поэтому решила заменить их на цветные круги.
-
     const letters = '0123456789ABCDEF';
     let color = '#';
     for (let i = 0; i < 6; i++) {

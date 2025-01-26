@@ -145,9 +145,9 @@ export class AngularTableComponent implements OnInit, AfterViewInit, OnDestroy {
   getFruitColor(fruit: string): string {
     switch (fruit.toLowerCase()) {
       case 'apple':
-        return '#ff0000';
+        return '#48ff00';
       case 'banana':
-        return '#ffe135';
+        return '#efce09';
       case 'strawberry':
         return '#ff4b4b';
       default:

@@ -109,7 +109,7 @@
               <span class="ml-1 align-middle">{{ item.name?.last || '-' }}</span>
             }
               @else if (column.field === 'favoriteFruit') {
-              <span>{{ getFruitColor(item[column.field]) }}</span>
+              <span [ngStyle]="{'color': getFruitColor(item[column.field])}">{{ item[column.field] }}</span>
             }
             @else if (column.field === 'email') {
               <span><i class="pi pi-at mr-1" style="color: slateblue"></i> {{ item[column.field] }}</span>
